@@ -85,6 +85,8 @@ var Terminal = React.createClass({
         this.setState({input: input});
         return false;
       case 38: // Up arrow key
+        if (!this.props.history) break;
+        
         var existingCommandIdx = _.lastIndexOf(history, input);
         if (existingCommandIdx === -1) {
           // Is typing a command, since it is not in the history, so
@@ -99,6 +101,8 @@ var Terminal = React.createClass({
         }
         break;
       case 40: // Down arrow key
+        if (!this.props.history) break;
+
         var existingCommandIdx = _.lastIndexOf(history, input);
         if (existingCommandIdx !== -1) {
           // Is not typing a command.
