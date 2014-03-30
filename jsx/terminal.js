@@ -70,41 +70,71 @@ var Terminal = React.createClass({
       this.setState({lines: lines});
     }
   },
-  preventDefault: function(e) {
-    if (e.which === 8) { // backspace
-      // Stop the browser from navigating back.
-      e.preventDefault();
-      // Remove the last character from input.
-      var input = this.state.input;
-      input = input.slice(0, -1);
-      this.setState({input: input});
-      return false;
+  handleKeyDown: function(e) {
+    var state = this.state, 
+        input = state.input, 
+        history = state.history;
+
+    switch (e.which) {
+      case 8: // backspace
+        // Stop the browser from navigating back.
+        e.preventDefault();
+        // Remove the last character from input.
+        var input = state.input;
+        input = input.slice(0, -1);
+        this.setState({input: input});
+        return false;
+      case 38: // Up arrow key
+        var existingCommandIdx = _.lastIndexOf(history, input);
+        if (existingCommandIdx === -1) {
+          // Is typing a command, since it is not in the history, so
+          // we retrieve the last command and display it.
+          input = history[history.length-1];
+          this.setState({history: history, input: input});
+        } else {
+          // In the middle of moving up the history, so we just display
+          // the previous one, or the same input if at the begining.
+          input = history[existingCommandIdx-1] || input;
+          this.setState({input: input});
+        }
+        break;
+      case 40: // Down arrow key
+        var existingCommandIdx = _.lastIndexOf(history, input);
+        if (existingCommandIdx !== -1) {
+          // Is not typing a command.
+          input = history[existingCommandIdx+1] || "";
+          this.setState({input: input});
+        }
+        break;
     }
   },
-  handleInput: function(e) {
+  handleKeyPress: function(e) {
     var state = this.state, 
       history = state.history,
       lines = state.lines,
       input = state.input,
       interpreter = this.props.interpreter;
-      
-    if (e.which === 13) { // Enter key
-      history.push(input);
-      lines.push(this.props.prompt + " " + input);
-      this.setState({
-        lines: lines, 
-        history: history,
-        pendingCommand: input,
-        input: "" // Clear the input
-      });
 
-      // Delegate to the interpreter to handle the command.
-      // The interpreter should call terminal.echo or terminal.error
-      // so that the terminal is re-rendered.
-      interpreter(input, this);
-    } else {
-      input += String.fromCharCode(e.which);
-      this.setState({input: input});
+    switch (e.which) {
+      case 13: // Enter
+        history.push(input);
+        lines.push(this.props.prompt + " " + input);
+        this.setState({
+          lines: lines, 
+          history: history,
+          pendingCommand: input,
+          input: "" // Clear the input
+        });
+
+        // Delegate to the interpreter to handle the command.
+        // The interpreter should call terminal.echo or terminal.error
+        // so that the terminal is re-rendered.
+        interpreter(input, this);
+        break;
+      default:
+        input += String.fromCharCode(e.which);
+        this.setState({input: input});
+        break;
     }
   },
   // Render
@@ -122,8 +152,8 @@ var Terminal = React.createClass({
     }
     return (
       <div className="terminal" 
-        onKeyPress={this.handleInput}
-        onKeyDown={this.preventDefault}
+        onKeyPress={this.handleKeyPress}
+        onKeyDown={this.handleKeyDown}
         tabIndex="0"
         style={terminalStyles}>
         <div className="terminal-output">

@@ -6,9 +6,7 @@ var ReactUI = React.createClass({
     if (command !== '') {
       try {
         var result = window.eval(command);
-        if (result !== undefined) {
-          term.echo(new String(result));
-        }
+        term.echo(new String(result));
       } catch(e) {
         term.error(new String(e));
       }
