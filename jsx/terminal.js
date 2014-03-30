@@ -70,6 +70,11 @@ var Terminal = React.createClass({
       this.setState({lines: lines});
     }
   },
+  componentDidUpdate: function() {
+    // Scroll to the bottom.
+    var el = this.getDOMNode();
+    el.scrollTop = el.scrollHeight;
+  },
   handleKeyDown: function(e) {
     var state = this.state, 
         input = state.input, 
@@ -86,7 +91,7 @@ var Terminal = React.createClass({
         return false;
       case 38: // Up arrow key
         if (!this.props.history) break;
-        
+
         var existingCommandIdx = _.lastIndexOf(history, input);
         if (existingCommandIdx === -1) {
           // Is typing a command, since it is not in the history, so
@@ -152,7 +157,9 @@ var Terminal = React.createClass({
   render: function() {
     var props = this.props, state = this.state;
     var terminalStyles = {
-      height: props.height
+      width: props.width || "100%",
+      height: props.height,
+      overflow: "auto"
     }
     return (
       <div className="terminal" 
