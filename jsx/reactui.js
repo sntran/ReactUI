@@ -25,7 +25,8 @@ var ReactUI = React.createClass({
                     }, 1000);
                   }} 
                   prompt="js>" 
-                  height="200"/>
+                  height="200"
+                  outputLimit={5}/>
       </div>
     );
   }
