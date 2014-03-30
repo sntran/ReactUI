@@ -34,7 +34,7 @@ var Terminal = React.createClass({
     lines.push(string);
     this.setState({
       lines: lines,
-      pendingCommand: false
+      pendingCommand: false // so that the command prompt shows.
     });
   },
   error: function(error) {
@@ -59,6 +59,17 @@ var Terminal = React.createClass({
     }
   },
   // Logic
+  componentDidMount: function() {
+    var props = this.props;
+    if (typeof props.greetings === "function") {
+      this.setState({pendingCommand: "greetings"});
+      props.greetings(this);
+    } else if (typeof props.greetings === "string") {
+      var lines = this.state.lines;
+      lines.push(props.greetings);
+      this.setState({lines: lines});
+    }
+  },
   handleInput: function(e) {
     var state = this.state, 
       history = state.history,
@@ -86,7 +97,7 @@ var Terminal = React.createClass({
     }
   },
   // Render
-  renderLines: function(line, idx) {
+  renderLine: function(line, idx) {
     return (
       <div key={"line-"+idx} style={{width: "100%"}}>
         {line}
@@ -103,16 +114,18 @@ var Terminal = React.createClass({
         onKeyPress={this.handleInput}
         tabIndex="0"
         style={terminalStyles}>
-        <div>{props.greetings}</div>
         <div className="terminal-output">
-          {state.lines.map(this.renderLines)}
+          {state.lines.map(this.renderLine)}
         </div>
-        <CommandLine 
-          prompt={props.prompt} 
-          history={state.history} 
-          style={{width: "100%"}}
-          input={state.input}
-        />
+        {
+          !state.pendingCommand? // Do not render the command prompt when waiting for output.
+            CommandLine({
+              prompt: props.prompt,
+              history: state.history,
+              style: {width: "100%"},
+              input: state.input
+          }) : false
+        }
       </div>
     );
   }

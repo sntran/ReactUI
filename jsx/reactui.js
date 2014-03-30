@@ -21,7 +21,11 @@ var ReactUI = React.createClass({
       <div>
         <h2>Terminal</h2>
         <Terminal interpreter={this.javascriptInterpreter} 
-                  greetings="Javascript Interpreter" 
+                  greetings={function(term) { 
+                    setTimeout(function() {
+                      term.echo("Javascript Interpreter");
+                    }, 1000);
+                  }} 
                   prompt="js>" 
                   height="200"/>
       </div>
