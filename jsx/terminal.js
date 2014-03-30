@@ -70,6 +70,17 @@ var Terminal = React.createClass({
       this.setState({lines: lines});
     }
   },
+  preventDefault: function(e) {
+    if (e.which === 8) { // backspace
+      // Stop the browser from navigating back.
+      e.preventDefault();
+      // Remove the last character from input.
+      var input = this.state.input;
+      input = input.slice(0, -1);
+      this.setState({input: input});
+      return false;
+    }
+  },
   handleInput: function(e) {
     var state = this.state, 
       history = state.history,
@@ -112,6 +123,7 @@ var Terminal = React.createClass({
     return (
       <div className="terminal" 
         onKeyPress={this.handleInput}
+        onKeyDown={this.preventDefault}
         tabIndex="0"
         style={terminalStyles}>
         <div className="terminal-output">
