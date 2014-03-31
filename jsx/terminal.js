@@ -219,15 +219,12 @@ var Terminal = React.createClass({
         <div className="terminal-output">
           {state.lines.map(this.renderLine)}
         </div>
-        {
-          !state.pendingCommand? // Do not render the command prompt when waiting for output.
-            CommandPrompt({
-              prompt: props.prompt,
-              history: state.history,
-              style: {width: "100%"},
-              input: state.input
-          }) : false
-        }
+        {state.pendingCommand? false :
+          <CommandPrompt
+              prompt={props.prompt}
+              history={state.history}
+              input={state.input}
+              style={{width: "100%"}} />}
       </div>
     );
   }
