@@ -18,8 +18,27 @@ var ReactUI = React.createClass({
     return (
       <div>
         <h2>Terminal</h2>
-        <Terminal ref="terminal" 
+        <Terminal ref="jsterminal" 
                   interpreter={this.javascriptInterpreter} 
+                  greetings={function(term) { 
+                    setTimeout(function() {
+                      term.echo("Javascript Interpreter");
+                    }, 1000);
+                  }} 
+                  prompt="js>" 
+                  height="200"
+                  outputLimit={10}/>
+
+        <h2>Terminal with custom Interpreter</h2>
+        <Terminal ref="terminal" 
+                  interpreter={{
+                    echo: function(arg1) {
+                      this.echo(arg1);
+                    },
+                    add: function(a, b) {
+                      this.echo(a+b);
+                    }
+                  }} 
                   greetings={function(term) { 
                     setTimeout(function() {
                       term.echo("Javascript Interpreter");

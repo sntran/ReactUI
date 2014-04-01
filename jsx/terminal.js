@@ -97,6 +97,13 @@ var Terminal = React.createClass({
     }
   },
   getDefaultProps: function() {
+    var props = this.props, interpreter = props.interpreter;
+    // Store the list of commands if interpreter is an object.
+    var commands = [];
+    if (typeof interpreter === "object") {
+      commands = _.keys(interpreter);
+    }
+
     return {
       history: true,
       prompt: ">", // string or function
@@ -104,6 +111,11 @@ var Terminal = React.createClass({
       interpreter: function(command, term) {
         term.echo(command);
       }, // function or string or object
+      completion: function(term, string, callback) {
+        callback(_.filter(commands, function(command) {
+          return command.indexOf(string) === 0;
+        }));
+      },
       outputLimit: -1 // number
     }
   },
@@ -125,7 +137,8 @@ var Terminal = React.createClass({
     el.scrollTop = el.scrollHeight;
   },
   handleKeyDown: function(e) {
-    var state = this.state, 
+    var props = this.props,
+        state = this.state, 
         input = state.input, 
         history = state.history;
 
@@ -138,6 +151,12 @@ var Terminal = React.createClass({
         input = input.slice(0, -1);
         this.setState({input: input});
         return false;
+      case 9: // tab
+        e.preventDefault();
+        props.completion(this, input, function(commands) {
+          this.echo(commands.join(", "));
+        }.bind(this));
+        break;
       case 38: // Up arrow key
         if (!this.props.history) break;
 
