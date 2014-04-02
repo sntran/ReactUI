@@ -1,3 +1,20 @@
+.clearfix {
+  *zoom: 1;
+}
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+.clearfix:after {
+  clear: both;
+}
+
+.window-title {
+  border-bottom: 1px solid black;
+}
+
 .terminal, .cmd {
   font-family: FreeMono, monospace;
   color: #aaa;

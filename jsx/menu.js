@@ -1,4 +1,5 @@
 /** @jsx React.DOM */
+"use strict";
 var Menu = React.createClass({
     getDefaultProps: function() {
         return {
