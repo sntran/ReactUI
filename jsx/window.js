@@ -39,12 +39,12 @@ var Window = React.createClass({
         style={{
           position: "relative", 
           width: props.width || "100%", 
-          height: props.height || "100%", 
+          height: props.height || "auto", 
           border: '1px solid black'
         }}
       >
         <div key="title-bar" className="window-title"
-          style={{width: "100%", height: titleBarHeight}}
+          style={{width: "100%", height: "auto"}}
         >{props.title}</div>
 
         <div key="window-content"

@@ -10,14 +10,14 @@ var Menu = React.createClass({
     },
     getInitialState: function() {
         return {
-            expanded: !(this.props.collapsible)
+            collapsed: this.props.collapsible === true
         }
     },
-    handleClick: function(idx, e) {
+    handleClick: function(e) {
         if (this.props.collapsible) {
             e.preventDefault();
             this.setState({
-                expanded: this.state.expanded === idx? false : idx
+                collapsed: !this.state.collapsed
             });
         }
     },
@@ -26,30 +26,29 @@ var Menu = React.createClass({
         var style = {
             float: this.props.symmetry == "horizontal"? "left": "none"
         };
-        var expanded = state.expanded === true || state.expanded === idx;
-        var children = (!child.props.children? false :
-                        <div className="menu-items-container"
-                             style={{display: expanded? "block": "none"}}
-                        >{child}</div>);
-        // When this child is clicked, and the menu is collapsible, hide the child's children.
         return (
             <li key={child.props.key} style={style}>
-                <a href="#" onClick={this.handleClick.bind(this, idx)}>{child.props.title}</a>
-                {children}
+                {child}
             </li>
         );
     },
     render: function() {
-        var props = this.props;
+        var props = this.props, state = this.state;
         var style = {
             listStylePosition: "inside",
             listStyleType: "none"
         }
+        if (state.collapsed) {style.display = "none";}
+        var className = state.collapsed? "collapsed" : "expanded";
+        
         return (
-            <ul className={"menu "+props.symmetry} rel={props.key} style={style}>
-                {React.Children.map(props.children, this.renderItem)}
-                <li style={{clear: "both"}} />
-            </ul>
+            <div>
+                <a href="#" onClick={this.handleClick} className={className}>{props.title}</a>
+                <ul className={"menu "+props.symmetry} rel={props.key} style={style}>
+                    {React.Children.map(props.children, this.renderItem)}
+                </ul>
+                <div style={{clear: "both"}} />
+            </div>
         )
     }
 })

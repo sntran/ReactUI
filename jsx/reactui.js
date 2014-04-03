@@ -18,15 +18,15 @@ var ReactUI = React.createClass({
   render: function() {
     return (
       <Window width="100%" height="100%" title={
-        <Menu height={30} symmetry="horizontal" collapsible={true}>
+        <Menu height={30} symmetry="horizontal">
           <img src={"http://placehold.it/32x32&text=Logo"}/>
-          <Menu title="File">
+          <Menu title="File" collapsible={true}>
             <a>New</a>
             <a>Save</a>
             <hr />
             <a>Close</a>
           </Menu>
-          <Menu title="Edit">
+          <Menu title="Edit" collapsible={true}>
             <a>Undo</a>
             <a>Redo</a>
           </Menu>
@@ -39,8 +39,8 @@ var ReactUI = React.createClass({
             <button><i className="icon-arrows-cw"></i></button>
           </p>
         }>
-          <Menu height={30} symmetry="vertical" collapsible={true}>
-            <Menu title="My Computer">
+          <Menu height={30} symmetry="vertical">
+            <Menu title="My Computer" collapsible={true}>
               <Menu title="C:\">
                 <Menu title="Program Files">
                   <Menu title="Common">
@@ -96,12 +96,7 @@ var ReactUI = React.createClass({
                         this.echo(a+b);
                       }
                     }} 
-                    greetings={function(term) { 
-                      setTimeout(function() {
-                        term.echo("Javascript Interpreter");
-                      }, 1000);
-                    }} 
-                    prompt="js>" 
+                    greetings="Custom Interpreter"
                     height="200"
                     outputLimit={10}/>
         </Window>
