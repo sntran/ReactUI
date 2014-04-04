@@ -39,31 +39,26 @@ var ReactUI = React.createClass({
             <button><i className="icon-arrows-cw"></i></button>
           </p>
         }>
-          <Menu height={30} symmetry="vertical">
-            <Menu title="My Computer" collapsible={true}>
-              <Menu title="C:\">
-                <Menu title="Program Files">
-                  <Menu title="Common">
-                    <a>Common File 1</a>
-                    <a>Common File 2</a>
-                  </Menu>
-                  <a>App 1.exe</a>
-                  <a>App 2.exe</a>
-                </Menu>
-                <Menu title="Windows">
-                  <Menu title="System32">
-                    <a>System File 1</a>
-                    <a>System File 2</a>
-                  </Menu>
-                  <a>Window File</a>
-                </Menu>
-              </Menu>
-              <Menu title="D:\">
-                <a>File 1.txt</a>
-                <a>File 2.bat</a>
-              </Menu>
-            </Menu>
-          </Menu>
+          <Tree data={
+            [
+              'Simple root node',
+              {
+                'text' : 'Root node 2',
+                'icon' : 'folder',
+                'state' : {
+                  'opened' : true,
+                  'selected' : true
+                },
+                'children' : [
+                  { 
+                    'text' : 'Child 1',
+                    'icon' : 'http://placehold.it/32x32'
+                  },
+                  'Child 2'
+                ]
+              }
+            ]
+          }/>
         </Window>
 
         <Window width="640" height="480" title={
